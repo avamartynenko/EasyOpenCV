@@ -350,8 +350,6 @@ public class OpenCvInternalCamera2Impl extends OpenCvCameraBase implements OpenC
                 }
             };
 
-            ptrNativeContext = createNativeContext(width, height);
-
             mCameraDevice.createCaptureSession(Arrays.asList(surface), callback, cameraHardwareHandler);
 
             streamingStartedLatch.await();
@@ -435,9 +433,15 @@ public class OpenCvInternalCamera2Impl extends OpenCvCameraBase implements OpenC
 
     };
 
+    /* CALLED WITH 'sync' held!! */
     private void onPreviewFrame(Image image)
     {
         notifyStartOfFrameProcessing();
+
+        if(ptrNativeContext == 0)
+        {
+            ptrNativeContext = createNativeContext(image.getWidth(), image.getHeight());
+        }
 
         Image.Plane[] planes = image.getPlanes();
         colorConversion(planes[0].getBuffer(), planes[1].getBuffer(), planes[2].getBuffer(), ptrNativeContext, rgbMat.nativeObj);
