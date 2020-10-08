@@ -35,7 +35,6 @@
 package org.openftc.easyopencv;
 
 import android.graphics.ImageFormat;
-import android.support.annotation.Nullable;
 
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -72,7 +71,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("WeakerAccess")
-class OpenCvWebcamImpl extends OpenCvCameraBase implements OpenCvWebcam, CameraCaptureSession.CaptureCallback
+public class OpenCvWebcamImpl extends OpenCvCameraBase implements OpenCvWebcam, CameraCaptureSession.CaptureCallback
 {
     private final CameraManagerInternal cameraManager;
     private final Executor serialThreadPool;
@@ -249,9 +248,7 @@ class OpenCvWebcamImpl extends OpenCvCameraBase implements OpenCvWebcam, CameraC
         startStreaming(width, height, getDefaultRotation());
     }
 
-    @Override
-    public void startStreaming(final int width, final int height, OpenCvCameraRotation rotation)
-    {
+    public void startStreaming(final int width, final int height, final int fps, OpenCvCameraRotation rotation) {
         synchronized (sync)
         {
             if(!isOpen)
@@ -309,9 +306,7 @@ class OpenCvWebcamImpl extends OpenCvCameraBase implements OpenCvWebcam, CameraC
                             CameraMode streamingMode = new CameraMode(
                                     width,
                                     height,
-                                    cameraCharacteristics.getMaxFramesPerSecond(
-                                            ImageFormatMapper.androidFromVuforiaWebcam(FrameFormat.YUYV),
-                                            new Size(width, height)),
+                                    fps,
                                     FrameFormat.YUYV);
 
                             //Indicate how we want to stream
@@ -374,6 +369,15 @@ class OpenCvWebcamImpl extends OpenCvCameraBase implements OpenCvWebcam, CameraC
 
             isStreaming = true;
         }
+    }
+
+    @Override
+    public void startStreaming(final int width, final int height, OpenCvCameraRotation rotation)
+    {
+        final int fps = cameraCharacteristics.getMaxFramesPerSecond(
+                ImageFormatMapper.androidFromVuforiaWebcam(FrameFormat.YUYV),
+                new Size(width, height));
+        startStreaming(width, height, fps, rotation);
     }
 
     @Override
