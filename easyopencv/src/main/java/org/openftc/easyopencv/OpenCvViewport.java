@@ -86,7 +86,7 @@ public class OpenCvViewport extends SurfaceView implements SurfaceHolder.Callbac
         fpsMeterBgPaint.setStyle(Paint.Style.FILL);
 
         fpsMeterTextPaint = new Paint();
-        fpsMeterTextPaint.setColor(Color.WHITE);
+        fpsMeterTextPaint.setColor(Color.MAGENTA);
         fpsMeterTextPaint.setTextSize(30);
 
         getHolder().addCallback(this);
@@ -658,8 +658,8 @@ public class OpenCvViewport extends SurfaceView implements SurfaceHolder.Callbac
             int textLine2Y = textLine1Y + textLineSpacing;
             int textLine3Y = textLine2Y + textLineSpacing;
 
-            canvas.drawText("OpenFTC EasyOpenCV v" + BuildConfig.VERSION_NAME, statBoxLTxtStart, textLine1Y, fpsMeterTextPaint);
-            canvas.drawText(getFpsString(), statBoxLTxtStart, textLine2Y, fpsMeterTextPaint);
+            //canvas.drawText("OpenFTC EasyOpenCV v" + BuildConfig.VERSION_NAME, statBoxLTxtStart, textLine1Y, fpsMeterTextPaint);
+            canvas.drawText(BuildConfig.VERSION_NAME + ":" + getFpsString(), statBoxLTxtStart, textLine2Y, fpsMeterTextPaint);
             canvas.drawText("Pipeline: " + pipelineMs + "ms" + " - Overhead: " + overheadMs + "ms", statBoxLTxtStart, textLine3Y, fpsMeterTextPaint);
         }
 
@@ -697,9 +697,9 @@ public class OpenCvViewport extends SurfaceView implements SurfaceHolder.Callbac
             if(!fpsMeterEnabled)
                 return;
 
-            canvas.drawRect(0, canvas.getHeight()-120, 450, canvas.getHeight(), fpsMeterBgPaint);
-            canvas.drawText("OpenFTC EasyOpenCV v" + BuildConfig.VERSION_NAME, 5, canvas.getHeight() - 80, fpsMeterTextPaint);
-            canvas.drawText(getFpsString(), 5, canvas.getHeight() - 45, fpsMeterTextPaint);
+            //canvas.drawRect(0, canvas.getHeight()-80, 450, canvas.getHeight(), fpsMeterBgPaint);
+            //canvas.drawText("OpenFTC EasyOpenCV v" + BuildConfig.VERSION_NAME, 5, canvas.getHeight() - 80, fpsMeterTextPaint);
+            canvas.drawText(BuildConfig.VERSION_NAME + ":" + getFpsString(), 5, canvas.getHeight() - 45, fpsMeterTextPaint);
             canvas.drawText("Pipeline: " + pipelineMs + "ms" + " - Overhead: " + overheadMs + "ms", 5, canvas.getHeight() - 10, fpsMeterTextPaint);
         }
     }
